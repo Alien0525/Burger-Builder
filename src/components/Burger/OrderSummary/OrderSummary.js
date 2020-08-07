@@ -22,7 +22,7 @@ class OrderSummary extends Component {
         <p>
           <strong>Total Price: {this.props.price.toFixed(2)}</strong>
         </p>
-        <p>Checkout?</p>
+        <p style={{color:"#2574db"}}><strong>Checkout?</strong></p>
         <Button btnType="Danger" clicked={this.props.purchaseCancelled}>
           Cancel
         </Button>
