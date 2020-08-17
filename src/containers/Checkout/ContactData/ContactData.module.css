@@ -1,9 +1,14 @@
-.ContactData{
-    margin: 2rem auto;
-    width: 50%;
-    text-align: center;
-    box-shadow:0 2px 10px 5px #ccc;
-    box-sizing: border-box;
-    padding: 1rem;
+.ContactData {
+  margin: 2rem auto;
+  width: 50%;
+  text-align: center;
+  box-shadow: 0 2px 10px 5px #ccc;
+  box-sizing: border-box;
+  padding: 1rem;
 }
 
+@media (max-width: 500px) {
+  .ContactData {
+    width: 80%;
+  }
+}

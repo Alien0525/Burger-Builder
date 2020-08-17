@@ -16,13 +16,13 @@ class OrderSummary extends Component {
     });
     return (
       <Auxiliary>
-        <h3>Your Order</h3>
+        <h3 style={{color:"#2574db"}}>Your Order</h3>
         <p>A delicious burger with the following ingredients</p>
         <ul>{ingredientSummary}</ul>
         <p>
           <strong>Total Price: {this.props.price.toFixed(2)}</strong>
         </p>
-        <p style={{color:"#2574db"}}><strong>Checkout?</strong></p>
+        <strong style={{color:"#2574db", marginTop:"2rem"}}>Checkout?</strong><br/>
         <Button btnType="Danger" clicked={this.props.purchaseCancelled}>
           Cancel
         </Button>

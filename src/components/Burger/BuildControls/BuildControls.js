@@ -21,10 +21,12 @@ const buildControls = (props) => (
         disabled={props.disabled[ctrl.type]}
       />
     ))}
+
     <button className={styles.OrderButton} disabled={!props.purchasable}
     onClick={props.ordered}>
-      PLACE ORDER
+      {props.isAuth? "PLACE ORDER" : "Login to Order"}
     </button>
+
   </div>
 );
 

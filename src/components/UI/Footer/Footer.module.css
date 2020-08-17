@@ -1,0 +1,20 @@
+.footer {
+      position:relative;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      padding: 0.01rem;
+      text-align: center;
+      background-color: #703b09;
+    
+    }
+    
+    .footer a {
+      text-decoration: none;
+      font-weight: bold;
+      color: white;
+    }
+    
+    .heart {
+      color: red;
+    }

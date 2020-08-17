@@ -38,11 +38,15 @@
 .BuildControl .Less {  
     background-color: #db3e17;
     color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #966909;
 }
 
 .BuildControl .More {
     background-color: #0871b8;
     color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px #966909;
 }
 
 .BuildControl .Less:hover, .BuildControl .Less:active {  

@@ -8,28 +8,18 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import * as actionTypes from "../../store/actions";
-
-
-
+import * as actions from "../../store/actions/index";
+import Footer from "../../components/UI/Footer/Footer"
 class BurgerBuilder extends Component {
   state = {
     purchaseMode: false,
-    loading: false,
-    error: false,
+    // loading: false,
+    // error: false,
   };
 
   componentDidMount() {
-    // axios
-    //   .get("https://burger-builder-react-2000.firebaseio.com/ingredients.json")
-    //   .then((response) => {
-    //     this.setState({ ingredients: response.data });
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ error: true });
-    //   });
+    this.props.onInitIngredients();
   }
-
 
   purchaseHandler = (ingredients) => {
     const sum = Object.keys(ingredients)
@@ -39,11 +29,16 @@ class BurgerBuilder extends Component {
       .reduce((sum, el) => {
         return sum + el;
       }, 0);
-    return sum > 0 ;
+    return sum > 0;
   };
 
   purchaseModeHandler = () => {
-    this.setState({ purchaseMode: true });
+    if (this.props.isAuthenticated) {
+      this.setState({ purchaseMode: true });
+    } else {
+      this.props.onSetAuthRedirectPath("/checkout")
+      this.props.history.push("/auth");
+    }
   };
   purchaseCancelHandler = () => {
     this.setState({ purchaseMode: false });
@@ -64,7 +59,8 @@ class BurgerBuilder extends Component {
     //   pathname: "/checkout",
     //   search: "?" + queryString,
     // });
-    this.props.history.push("/checkout")
+    this.props.onInitPurchase();
+    this.props.history.push("/checkout");
   };
 
   render() {
@@ -77,7 +73,7 @@ class BurgerBuilder extends Component {
 
     let orderSummary = null;
 
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
@@ -91,9 +87,10 @@ class BurgerBuilder extends Component {
             ingredientAdded={this.props.addIngredientHandler}
             ingredientRemoved={this.props.removeIngredientHandler}
             disabled={disabledInfo}
-            purchasable={() => this.purchaseHandler(this.props.ingredients)}
+            purchasable={this.purchaseHandler(this.props.ingredients)}
             price={this.props.totalPrice}
             ordered={this.purchaseModeHandler}
+            isAuth={this.props.isAuthenticated}
           />
         </Auxiliary>
       );
@@ -107,10 +104,6 @@ class BurgerBuilder extends Component {
       );
     }
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
-
     return (
       <Auxiliary>
         <Modal
@@ -120,6 +113,7 @@ class BurgerBuilder extends Component {
           {orderSummary}
         </Modal>
         {burger}
+        <Footer/>
       </Auxiliary>
     );
   }
@@ -127,19 +121,20 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice
+    ingredients: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    error: state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    addIngredientHandler: (ingName) =>
-      dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
+    addIngredientHandler: (ingName) => dispatch(actions.addIngredient(ingName)),
     removeIngredientHandler: (ingName) =>
-      dispatch({
-        type: actionTypes.REMOVE_INGREDIENT,
-        ingredientName: ingName,
-      }),
+      dispatch(actions.removeIngredient(ingName)),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
+    onInitPurchase: () => dispatch(actions.purchaseInit()),
+    onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
   };
 };
 
